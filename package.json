@@ -9,12 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.8",
+    "@mui/material": "^5.14.8",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
+    "axios": "^1.5.0",
+    "cookies": "^0.8.0",
+    "formik": "^2.4.4",
+    "iron-session": "^6.3.1",
     "next": "13.4.19",
+    "query-string": "^8.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "use-debounce": "^9.0.4",
+    "yup": "^1.2.0"
   }
 }

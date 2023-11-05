@@ -1,95 +1,129 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { Backdrop, Box, Button, CircularProgress, Grid, Paper, Typography } from "@mui/material";
+import { useFormik } from "formik";
+import { TextFieldCustom } from "./_components/TextFieldCustom";
+import * as Yup from "yup";
+import { AuthService } from "@/services/auth/AuthService";
+
+const validationSchema = Yup.object().shape({
+  password: Yup.string().required("Last name is required"),
+  username: Yup.string().required("Số điện thoại là trường bắt buộc"),
+});
 
 export default function Home() {
+  console.log("re render");
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log("values: ", values);
+      AuthService.login(values.username, values.password);
+    },
+  });
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flex: 1,
+      }}
+    >
+      <Paper
+        variant="outlined"
+        sx={{
+          padding: 4,
+          width: 550,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box>
+          <Typography
+            variant="h1"
+            sx={{
+              fontSize: 40,
+              fontWeight: "500",
+              textAlign: "center",
+              mb: 4,
+            }}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+            Đăng nhập vào hệ thống
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextFieldCustom
+                error={!!formik.errors.username}
+                helperText={formik.errors.username}
+                fullWidth
+                label="Tài khoản"
+                name="username"
+                onChange={formik.handleChange}
+                required
+                value={formik.values.username}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextFieldCustom
+                error={!!formik.errors.password}
+                helperText={formik.errors.password}
+                fullWidth
+                label="Mật khẩu"
+                name="password"
+                type="password"
+                onChange={formik.handleChange}
+                required
+                value={formik.values.password}
+                variant="outlined"
+              />
+            </Grid>
+          </Grid>
+          <Box
+            sx={{
+              mt: 4,
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                marginRight: 4,
+                fontSize: 18,
+              }}
+              onClick={formik.submitForm}
+            >
+              Đăng nhập
+            </Button>
+            <Button
+              href="/"
+              sx={{
+                fontSize: 18,
+              }}
+            >
+              Hủy
+            </Button>
+          </Box>
+        </Box>
+      </Paper>
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={false}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </Box>
+  );
 }
